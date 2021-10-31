@@ -4,6 +4,7 @@ import Login from "./Login";
 import Dashboard from "./Dashboard";
 
 const code = new URLSearchParams(window.location.search).get("code");
+console.log("codeee", code);
 
 function App() {
   return code ? <Dashboard /> : <Login />;

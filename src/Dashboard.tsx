@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import styles from "./App.module.scss";
 import SideBar from "./components/SideBar/SideBar";
 import Player from "./components/Player/Player";
@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Playlists as PlaylistsType } from "./types/Playlists";
 
+export const StoreContext = createContext(null);
+
 type DashboardProps = {
   playlists: PlaylistsType;
   initPlaylists: (data: PlaylistsType) => void;
@@ -16,9 +18,6 @@ type DashboardProps = {
 
 const Dashboard = ({ playlists, initPlaylists }: DashboardProps) => {
   const [error, setError] = useState<null | string>();
-  //   const params = useParams();
-  //   const token = params.access_token;
-  //   console.log("Params", params);
   const loadPlaylists = useCallback(async () => {
     await GetPlaylists().then((data) => {
       if (data?.playlists) {
@@ -27,19 +26,19 @@ const Dashboard = ({ playlists, initPlaylists }: DashboardProps) => {
         setError("Could not load data");
       }
     });
-    // await GetCurrentPlayingTrack().then((data) => {
-    //   console.log("log curre", data);
-    // });
+    await GetCurrentPlayingTrack().then((data) => {
+      console.log("log curre", data);
+    });
   }, [initPlaylists]);
 
   useEffect(() => {
     loadPlaylists();
   }, [loadPlaylists]);
 
-//   const addToPlayList = useCallback(async (track) => {
-//     console.log(track);
-//     return track;
-//   }, []);
+  //   const addToPlayList = useCallback(async (track) => {
+  //     console.log(track);
+  //     return track;
+  //   }, []);
 
   if (error) {
     return <div className={styles.Error}>{error}</div>;
@@ -57,7 +56,7 @@ const Dashboard = ({ playlists, initPlaylists }: DashboardProps) => {
             <PlaylistDetail />
           </Route>
 
-          <Player/>
+          <Player />
         </Router>
       </div>
     );

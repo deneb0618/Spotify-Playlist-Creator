@@ -39,5 +39,27 @@
       overflow-x: hidden;
       max-height: 600px;
     }
+    .New {
+      margin-left: 25px;
+    }
+  }
+}
+
+.new-playlist {
+  position: absolute;
+  bottom: 80px;
+
+  i {
+    margin-right: 5px;
+    transform: translateY(1px);
+
+    &:before {
+      font-size: 20px;
+    }
+  }
+
+  span {
+    color: #999;
+    font-weight: 300;
   }
 }
