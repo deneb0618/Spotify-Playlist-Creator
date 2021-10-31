@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Like } from "../../assets/Like";
 import { Play } from "../../assets/Play";
@@ -10,6 +10,7 @@ import { millisToMinutesAndSeconds } from "../../utils/msToMinutes";
 import { useBar } from "../../utils/useBar";
 import { VolumeMuted } from "../../assets/VolumeMuted";
 import { Track } from "../../types/Track";
+import { GetCurrentPlayingTrack } from "../../API";
 
 type PlayerProps = {
   playPause: () => void;
@@ -26,8 +27,20 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
   const volumeRef = useRef<HTMLDivElement | null>(null);
 
   const [mute, setMute] = useState(false);
+  const [track, setTrack] = useState();
 
   const barCallBack = useBar;
+
+  const loadCurrentSong = useCallback(async () => {
+    await GetCurrentPlayingTrack().then((data) => {
+      console.log("log curre", data.item);
+      setTrack(data.item);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadCurrentSong();
+  }, [loadCurrentSong]);
 
   useEffect(() => {
     // Adjust time when progress bar is clicked
@@ -47,8 +60,10 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
       setMute(false);
     }
   }, [volume]);
+  const play: any = track;
+  console.log("player", play);
 
-  if (!song) {
+  if (!track) {
     return null;
   } else {
     return (
@@ -56,11 +71,11 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
         <footer>
           <div className={styles.Song}>
             <div className={styles.Img}>
-              <img src={song.track.album.images[0].url} alt="song" />
+              <img src={play.album.images[1].url} alt="song" />
             </div>
             <div className={styles.Infos}>
-              <div className={styles.Name}>{song.track.name}</div>
-              <div className={styles.Artist}>{song.track.artists[0].name}</div>
+              <div className={styles.Name}>{play.name}</div>
+              <div className={styles.Artist}>{play.artists[0].name}</div>
             </div>
             <div className={styles.Like}>
               <p>Add to Playlist</p>
@@ -116,9 +131,9 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
             </div>
           </div>
         </footer>
-        {song.track.preview_url && (
+        {play.preview_url && (
           <Sound
-            url={song.track.preview_url}
+            url={play.preview_url}
             playStatus={playing ? "PLAYING" : "PAUSED"}
             //@ts-ignore
             onPlaying={({ position }) => {
