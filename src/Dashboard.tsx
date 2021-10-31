@@ -10,33 +10,40 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "4fb1db4af98b4d9abcb625515cdcd3cb",
 });
 
-export default function Dashboard({ code }) {
+interface Track {
+  artist: string;
+  title: string;
+  uri: string;
+  albumUrl: string;
+}
+
+export default function Dashboard({ code }: { code: string }) {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
   const [lyrics, setLyrics] = useState("");
 
-  function chooseTrack(track) {
+  function chooseTrack(track: any) {
     setPlayingTrack(track);
     setSearch("");
     setLyrics("");
   }
 
-  useEffect(() => {
-    if (!playingTrack) return;
+  //   useEffect(() => {
+  //     if (!playingTrack) return;
 
-    axios
-      .get("http://localhost:3001/lyrics", {
-        params: {
-          track: playingTrack.title,
-          artist: playingTrack.artist,
-        },
-      })
-      .then((res) => {
-        setLyrics(res.data.lyrics);
-      });
-  }, [playingTrack]);
+  //     axios
+  //       .get("http://localhost:3001/lyrics", {
+  //         params: {
+  //           track: playingTrack.title,
+  //           artist: playingTrack.artist,
+  //         },
+  //       })
+  //       .then((res) => {
+  //         setLyrics(res.data.lyrics);
+  //       });
+  //   }, [playingTrack]);
 
   useEffect(() => {
     if (!accessToken) return;
@@ -50,26 +57,25 @@ export default function Dashboard({ code }) {
     let cancel = false;
     spotifyApi.searchTracks(search).then((res) => {
       if (cancel) return;
-      setSearchResults(
-        res.body.tracks.items.map((track) => {
-          const smallestAlbumImage = track.album.images.reduce(
-            (smallest, image) => {
-              if (image.height < smallest.height) return image;
-              return smallest;
-            },
-            track.album.images[0]
-          );
-
-          return {
-            artist: track.artists[0].name,
-            title: track.name,
-            uri: track.uri,
-            albumUrl: smallestAlbumImage.url,
-          };
-        })
-      );
+      //   setSearchResults(
+      //     res.body.tracks?.items.map((track: Track) => {
+      //         const smallestAlbumImage = track.album.images.reduce(
+      //           (smallest: { height: number }, image: { height: number }) => {
+      //             if (image.height < smallest.height) return image;
+      //             return smallest;
+      //           },
+      //           track.album.images[0]
+      //         );
+      //       return {
+      //         artist: track.artists[0].name,
+      //         title: track.name,
+      //         uri: track.uri,
+      //         albumUrl: track.album.images[0],
+      //       };
+      //     })
+      //   );
+      console.log(res);
     });
-
     return () => (cancel = true);
   }, [search, accessToken]);
 
