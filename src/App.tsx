@@ -3,11 +3,21 @@ import "./App.module.scss";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 
-const code = new URLSearchParams(window.location.search).get("code");
-console.log("codeee", code);
+const getToken = (url: any) => {
+  return url
+    .slice(1)
+    .split("&")
+    .reduce((prev: any, curr: any) => {
+      const [title, value] = curr.split("=");
+      prev[title] = value;
+      return prev;
+    }, {});
+};
 
+const token = getToken(window.location.hash);
+localStorage.setItem("params", JSON.stringify(token));
 function App() {
-  return code ? <Dashboard /> : <Login />;
+  return token ? <Dashboard /> : <Login />;
 }
 
 export default App;

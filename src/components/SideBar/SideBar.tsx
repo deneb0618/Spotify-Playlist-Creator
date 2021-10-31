@@ -5,16 +5,14 @@ import ListItem from "./ListItem/ListItem";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Playlist } from "../../types/Playlist";
-import { useContext, useReducer, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "../Modal/Modal";
-import { initialState, reducer } from "../../store/reducers/reducer";
 
 type SideBarProps = {
   playlists: Playlist[];
 };
 
 const SideBar = ({ playlists }: SideBarProps) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const [sidebarState, setState] = useState({
     modal: false,
     toast: "",

@@ -76,12 +76,11 @@ export async function GetPlaylistDetail(idPlayslit: string) {
 }
 
 export async function GetCurrentPlayingTrack() {
-  const auth = await getAuth();
-  console.log("auth", auth);
+  const params = JSON.parse(localStorage.getItem("params") as string);
   return axios
     .get(baseUrl + "/me/player/currently-playing", {
       headers: {
-        Authorization: `Bearer ${auth}`,
+        Authorization: `Bearer ${params.access_token}`,
       },
     })
     .then((response) => {
