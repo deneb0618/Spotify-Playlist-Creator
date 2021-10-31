@@ -4,7 +4,7 @@ import { Like } from "../../assets/Like";
 import { Play } from "../../assets/Play";
 import { Pause } from "../../assets/Pause";
 import { Volume } from "../../assets/Volume";
-import styles from "./Player.module.css";
+import styles from "./Player.module.scss";
 import Sound from "react-sound";
 import { millisToMinutesAndSeconds } from "../../utils/msToMinutes";
 import { useBar } from "../../utils/useBar";

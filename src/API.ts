@@ -11,8 +11,8 @@ async function getAuthorizationToken() {
       "https://accounts.spotify.com/api/token",
       qs.stringify({
         grant_type: "client_credentials",
-        client_id: "4fb1db4af98b4d9abcb625515cdcd3cb",
-        client_secret: "7df331586b5d47839949f08dfa5fddb8",
+        client_id: "74c26f74eb5d43e1a5aec8cf82065105",
+        client_secret: "f169d40b58c749d0b9dc86f52bf48b10",
       }),
       {
         headers: {

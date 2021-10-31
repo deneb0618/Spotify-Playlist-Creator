@@ -1,4 +1,4 @@
-import styles from "./ListItem.module.css";
+import styles from "./ListItem.module.scss";
 import { Link } from "react-router-dom";
 import { Playlist } from "../../../types/Playlist";
 

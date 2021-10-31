@@ -1,4 +1,4 @@
-import styles from "./SideBar.module.css";
+import styles from "./SideBar.module.scss";
 import { Logo } from "../../assets/Logo";
 import ListItem from "./ListItem/ListItem";
 
