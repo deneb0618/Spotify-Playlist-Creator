@@ -17,7 +17,7 @@ const getToken = (url: any) => {
 const token = getToken(window.location.hash);
 localStorage.setItem("params", JSON.stringify(token));
 function App() {
-  return token ? <Dashboard /> : <Login />;
+  return typeof token.access_token === "string" ? <Dashboard /> : <Login />;
 }
 
 export default App;
