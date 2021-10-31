@@ -6,7 +6,7 @@ import Dashboard from "./Dashboard";
 const code = new URLSearchParams(window.location.search).get("code");
 
 function App() {
-  return code ? <Dashboard /> : <Dashboard />;
+  return code ? <Dashboard /> : <Login />;
 }
 
 export default App;

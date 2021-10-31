@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Like } from "../../assets/Like";
 import { Play } from "../../assets/Play";
@@ -48,6 +48,11 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
     }
   }, [volume]);
 
+  const addToPlayList = useCallback(async (song) => {
+    console.log(song);
+    return song;
+  }, []);
+
   if (!song) {
     return null;
   } else {
@@ -62,7 +67,8 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
               <div className={styles.Name}>{song.track.name}</div>
               <div className={styles.Artist}>{song.track.artists[0].name}</div>
             </div>
-            <div className={styles.Like}>
+            <div className={styles.Like} onClick={addToPlayList}>
+              <p>Add to Playlist</p>
               <Like />
             </div>
           </div>
