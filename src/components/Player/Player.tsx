@@ -11,6 +11,7 @@ import { useBar } from "../../utils/useBar";
 import { VolumeMuted } from "../../assets/VolumeMuted";
 import { Track } from "../../types/Track";
 import { GetCurrentPlayingTrack } from "../../API";
+import Modal from "../Modal/Modal";
 
 type PlayerProps = {
   playPause: () => void;
@@ -28,8 +29,34 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
 
   const [mute, setMute] = useState(false);
   const [track, setTrack] = useState();
+  const [sidebarState, setState] = useState({
+    modal: false,
+    toast: "",
+  });
+  const playlistRef = useRef(null);
 
   const barCallBack = useBar;
+
+  const handleModal = () =>
+    setState({ ...sidebarState, modal: !sidebarState.modal });
+  const addPlaylist = (e: any) => {
+    e.preventDefault();
+    // const list = playlistRef.current ? playlistRef.current.value : null;
+
+    // dispatch({ type: "ADD_PLAYLIST", playlist: list });
+
+    setState({
+      ...sidebarState,
+      modal: false,
+      toast: "Playlist was created successfully!",
+    });
+
+    setState({
+      ...sidebarState,
+      modal: false,
+      toast: "Playlist was created successfully!",
+    });
+  };
 
   const loadCurrentSong = useCallback(async () => {
     await GetCurrentPlayingTrack().then((data) => {
@@ -77,7 +104,7 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
               <div className={styles.Name}>{play.name}</div>
               <div className={styles.Artist}>{play.artists[0].name}</div>
             </div>
-            <div className={styles.Like}>
+            <div className={styles.Like} onClick={handleModal}>
               <p>Add to Playlist</p>
               <Like />
             </div>
@@ -145,6 +172,24 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
             position={time}
           />
         )}
+        <Modal show={sidebarState.modal} close={handleModal}>
+          <form onSubmit={addPlaylist}>
+            <div className="title">New Playlist</div>
+
+            <div className="content-wrap">
+              <input
+                type="text"
+                placeholder="My Playlist"
+                ref={playlistRef}
+                required
+              />
+
+              <br />
+
+              <button type="submit">Create</button>
+            </div>
+          </form>
+        </Modal>
       </div>
     );
   }
