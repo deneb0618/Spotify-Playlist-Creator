@@ -5,7 +5,7 @@ import { millisToMinutesAndSeconds } from "../../../utils/msToMinutes";
 import styles from "./SongItem.module.scss";
 
 type SongItemPros = {
-  song: Track;
+  song: any;
   index: number;
   songClicked: () => void;
   current: boolean;
@@ -23,7 +23,7 @@ export const SongItem = ({
         <div
           className={[
             styles.Item,
-            song.track.preview_url ? styles.Enabled : styles.Disabled,
+            song.preview_url ? styles.Enabled : styles.Disabled,
           ].join(" ")}
           onClick={songClicked}
         >
@@ -37,31 +37,29 @@ export const SongItem = ({
           </div>
 
           <div className={styles.Title}>
-            <img src={song.track.album.images[0].url} alt="cover img" />
+            <img src={song.album.images[0].url} alt="cover img" />
             <div className={styles.NameContainer}>
               <div
                 className={styles.Name}
                 style={current ? { color: "#1db954" } : { color: "white" }}
               >
-                <span>{song.track.name}</span>
+                <span>{song.name}</span>
               </div>
-              {song.track.explicit && (
-                <span className={styles.Explicit}>e</span>
-              )}
+              {song.explicit && <span className={styles.Explicit}>e</span>}
               <span
                 className={[
                   styles.Artist,
-                  song.track.explicit ? styles.Artist_sub : styles.Artist_badg,
+                  song.explicit ? styles.Artist_sub : styles.Artist_badg,
                 ].join(", ")}
               >
-                {song.track.artists[0].name}
+                {song.artists[0].name}
               </span>
             </div>
           </div>
-          <div>{song.track.album.name}</div>
-          <div>{formatDate(song.added_at)}</div>
+          <div>{song.album.name}</div>
+          <div>{formatDate(song.album.release_date)}</div>
           <div className={styles.Length}>
-            {millisToMinutesAndSeconds(song.track.duration_ms)}
+            {millisToMinutesAndSeconds(song.duration_ms)}
             <button className={styles.More}>...</button>
           </div>
         </div>

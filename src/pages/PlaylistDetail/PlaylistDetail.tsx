@@ -1,8 +1,7 @@
 import FastAverageColor from "fast-average-color";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
-import { GetPlaylistDetail } from "../../API";
 import styles from "./PlaylistDetail.module.scss";
 import { SongItem } from "./SongItem/SongItem";
 import { Time } from "../../assets/Time";
@@ -11,17 +10,13 @@ import { Playlist } from "../../types/Playlist";
 
 type PlaylistDetailProps = {
   loadSong: (song: Track) => void;
-  currentSong: Track;
+  currentSong: any;
 };
 
 const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
   const { id } = useParams<{ id: string }>();
   const [playlist, setPlaylist] = useState<Playlist | null>();
   const coverRef = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    loadPlaylistDetails(id);
-  }, [id]);
 
   useEffect(() => {
     if (coverRef.current) {
@@ -41,44 +36,67 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
     }
   }, [playlist]);
 
-  const loadPlaylistDetails = async (playlistId: string) => {
-    await GetPlaylistDetail(playlistId).then((data) => {
-      setPlaylist(data);
-    });
-  };
+  // const loadPlaylistDetails = async (playlistId: string) => {
+  //   let cachedList: any = localStorage.getItem("playlist");
+  //   let playListArray = [];
+  //   playListArray = JSON.parse(cachedList) || [];
+  //   const tracks: any = playListArray.find(
+  //     (tr: { id: string }) => tr.id === playlistId
+  //   );
+  //   setPlaylist(tracks.tracks);
+  //   console.log("playListArray tracks", playlist);
+  //   // await GetPlaylistDetail(playlistId).then((data) => {
+  //   //   setPlaylist(data);
+  //   // });
+  // };
 
-  const songClicked = (song: Track) => {
-    if (song.track.preview_url) {
+  const loadPlaylistDetails = useCallback(
+    async (playlistId: string) => {
+      let cachedList: any = localStorage.getItem("playlist");
+      let playListArray = [];
+      playListArray = JSON.parse(cachedList) || [];
+      const tracks: any = playListArray.find(
+        (tr: { id: string }) => tr.id === playlistId
+      );
+      setPlaylist(tracks.tracks);
+      console.log("playListArray tracks", tracks.tracks);
+    },
+    [playlist]
+  );
+
+  useEffect(() => {
+    loadPlaylistDetails(id);
+  }, [id, loadPlaylistDetails]);
+
+  const songClicked = (song: any) => {
+    if (song.preview_url) {
       loadSong(song);
     }
   };
 
+  const trackList: any = playlist;
+  console.log("playListArray tracks playlist", trackList);
+
   return (
     <>
-      {playlist && (
+      {trackList && (
         <div className={styles.PlaylistDetail}>
           <div className={styles.Cover}>
             <div className={styles.Background} id="Background"></div>
             <div className={styles.Gradient}></div>
             <div className={styles.Img}>
-              <img
-                src={playlist.images[0].url}
-                alt="playlist img"
-                ref={coverRef}
-              />
+              <img src="" alt="playlist img" ref={coverRef} />
             </div>
             <div className={styles.Infos}>
               <div className={styles.Playlist}>PLAYLIST</div>
               <div className={styles.Title}>
-                <h1>{playlist.name}</h1>
+                <h1>{trackList.name}</h1>
               </div>
-              <div className={styles.Categ}>{playlist.description}</div>
+              <div className={styles.Categ}>{trackList.description}</div>
               <div className={styles.Details}>
-                <span className={styles.Text_Bold}>
-                  {playlist.owner.display_name}
-                </span>
+                <span className={styles.Text_Bold}>"dsdsd"</span>
                 <span className={styles.Text_Light}>
-                  {playlist.tracks.items.length} songs, about 4 hr 20 min
+                  43 songs, about 4 hr 20 min
                 </span>
               </div>
             </div>
@@ -98,12 +116,12 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
               </div>
             </div>
 
-            {playlist.tracks.items.map((item: Track, index: number) => (
+            {trackList.map((item: any, index: number) => (
               <SongItem
-                key={item.track.id}
+                key={item.id}
                 song={item}
                 index={index}
-                current={item.track.id === currentSong?.track.id ? true : false}
+                current={item.id === currentSong?.id ? true : false}
                 songClicked={() => songClicked(item)}
               />
             ))}

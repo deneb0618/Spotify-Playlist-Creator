@@ -1,6 +1,7 @@
 import { Track } from "./Track";
 
 export declare interface Playlist {
+  play: any;
   collaborative: Boolean;
   description: string;
   external_urls: { spotify: string };

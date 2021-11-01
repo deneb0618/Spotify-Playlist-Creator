@@ -82,8 +82,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
       id: generatePlaylistId(),
       tracks: [],
     });
-    console.log("playlist array", playListArray);
-    console.log("playlist array json", JSON.stringify(playListArray));
     localStorage.setItem("playlist", JSON.stringify(playListArray));
   };
 
@@ -100,17 +98,11 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
   };
 
   const saveToPlaylist = (playlistSelect: string, play: any) => {
-    console.log("playlistSelect", playlistSelect);
-    console.log("song track", play);
-    console.log("curr play list", currentPlayList);
-    let track = { play };
     let foundPlayList = currentPlayList.findIndex(
       (pL: any) => pL.id === playlistSelect
     );
-    currentPlayList[foundPlayList].tracks.push(track);
-    console.log("combined play list", currentPlayList);
+    currentPlayList[foundPlayList].tracks.push(play);
     localStorage.setItem("playlist", JSON.stringify(currentPlayList));
-
     setState({
       ...sidebarState,
       addModal: false,
