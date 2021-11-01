@@ -39,9 +39,32 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
 
   const handleModal = () =>
     setState({ ...sidebarState, modal: !sidebarState.modal });
+
+  const generatePlaylistId = () => {
+    let result = "";
+    let characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let charactersLength = characters.length;
+    for (let i = 0; i < 16; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+  const savePlayListToLocalStorage = (playlist: any) => {
+    let cachedList: any = localStorage.getItem("playlist");
+    let playListArray = [];
+    playListArray = JSON.parse(cachedList) || [];
+    playListArray.push({ name: playlist, id: generatePlaylistId() });
+    console.log("playlist array", playListArray);
+    console.log("playlist array json", JSON.stringify(playListArray));
+    localStorage.setItem("playlist", JSON.stringify(playListArray));
+  };
   const addPlaylist = (e: any) => {
     e.preventDefault();
-    // const list = playlistRef.current ? playlistRef.current.value : null;
+    const pList: any = playlistRef;
+    const list = pList.current.value;
+    console.log("listtt", list);
+    savePlayListToLocalStorage(list);
 
     // dispatch({ type: "ADD_PLAYLIST", playlist: list });
 
@@ -51,11 +74,11 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
       toast: "Playlist was created successfully!",
     });
 
-    setState({
-      ...sidebarState,
-      modal: false,
-      toast: "Playlist was created successfully!",
-    });
+    // setState({
+    //   ...sidebarState,
+    //   modal: false,
+    //   toast: "Playlist was created successfully!",
+    // });
   };
 
   const loadCurrentSong = useCallback(async () => {
@@ -78,7 +101,7 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
     //Reset progress if the song change
     setProgress(0);
     setTime(0);
-  }, [song]);
+  }, [track]);
 
   useEffect(() => {
     if (volume < 5) {
@@ -88,7 +111,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
     }
   }, [volume]);
   const play: any = track;
-  console.log("player", play);
 
   if (!track) {
     return null;
@@ -104,8 +126,8 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
               <div className={styles.Name}>{play.name}</div>
               <div className={styles.Artist}>{play.artists[0].name}</div>
             </div>
-            <div className={styles.Like} onClick={handleModal}>
-              <p>Add to Playlist</p>
+            <div className={styles.Like}>
+              <p>Add To Playlist</p>
               <Like />
             </div>
           </div>
@@ -133,6 +155,11 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
               </div>
               <div>0:30</div>
             </div>
+          </div>
+
+          <div className={styles.Like} onClick={handleModal}>
+            <p>Create New Playlist</p>
+            <Like />
           </div>
 
           <div className={styles.Volume}>
@@ -174,18 +201,15 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
         )}
         <Modal show={sidebarState.modal} close={handleModal}>
           <form onSubmit={addPlaylist}>
-            <div className="title">New Playlist</div>
-
-            <div className="content-wrap">
+            <div className={styles.title}>New Playlist</div>
+            <div className={styles.content_wrap}>
               <input
                 type="text"
                 placeholder="My Playlist"
                 ref={playlistRef}
                 required
               />
-
               <br />
-
               <button type="submit">Create</button>
             </div>
           </form>

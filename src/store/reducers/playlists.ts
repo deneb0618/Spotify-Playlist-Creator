@@ -6,6 +6,7 @@ const playlistReducer = (
   },
   action: { type: "init"; playlists: Playlists }
 ) => {
+  console.log("init", action.playlists);
   switch (action.type) {
     case "init":
       return { playlists: action.playlists };

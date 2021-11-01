@@ -13,7 +13,7 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
       <div className={styles.Playlist}>
         <div className={styles.imgContainer}>
           <img
-            src={playlist.images[0].url}
+            src="https://yt3.ggpht.com/52PtXtXNMroFAK69H7c1BnQNjuWmeohAc78CB9lX_qic9WmJljgsGbYM7I4rhnb8ZjNewJmPVg=s900-c-k-c0x00ffffff-no-rj"
             alt="Tokyo"
           />
           <div className={styles.PlayContainer}>

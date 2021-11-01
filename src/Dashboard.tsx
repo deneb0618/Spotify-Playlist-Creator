@@ -4,7 +4,6 @@ import SideBar from "./components/SideBar/SideBar";
 import Player from "./components/Player/Player";
 import Playlists from "./pages/Playlists/Playlists";
 import PlaylistDetail from "./pages/PlaylistDetail/PlaylistDetail";
-import { GetPlaylists, GetCurrentPlayingTrack } from "./API";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Playlists as PlaylistsType } from "./types/Playlists";
@@ -19,16 +18,21 @@ type DashboardProps = {
 const Dashboard = ({ playlists, initPlaylists }: DashboardProps) => {
   const [error, setError] = useState<null | string>();
   const loadPlaylists = useCallback(async () => {
-    await GetPlaylists().then((data) => {
-      if (data?.playlists) {
-        initPlaylists(data?.playlists?.items);
-      } else {
-        setError("Could not load data");
-      }
-    });
-    await GetCurrentPlayingTrack().then((data) => {
-      console.log("log curre", data);
-    });
+    // await GetPlaylists().then((data) => {
+    //   if (data?.playlists) {
+    //     initPlaylists(data?.playlists?.items);
+    //   } else {
+    //     setError("Could not load data");
+    //   }
+    // });
+    try {
+      let cachedList: any = localStorage.getItem("playlist");
+      let playListArray = [];
+      playListArray = JSON.parse(cachedList) || [];
+      initPlaylists(playListArray);
+    } catch (error) {
+      setError("Could not load current playing song");
+    }
   }, [initPlaylists]);
 
   useEffect(() => {
