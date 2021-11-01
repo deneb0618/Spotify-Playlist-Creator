@@ -18,31 +18,19 @@ type DashboardProps = {
 const Dashboard = ({ playlists, initPlaylists }: DashboardProps) => {
   const [error, setError] = useState<null | string>();
   const loadPlaylists = useCallback(async () => {
-    // await GetPlaylists().then((data) => {
-    //   if (data?.playlists) {
-    //     initPlaylists(data?.playlists?.items);
-    //   } else {
-    //     setError("Could not load data");
-    //   }
-    // });
     try {
       let cachedList: any = localStorage.getItem("playlist");
       let playListArray = [];
       playListArray = JSON.parse(cachedList) || [];
       initPlaylists(playListArray);
     } catch (error) {
-      setError("Could not load current playing song");
+      setError("Could not load playlists");
     }
   }, [initPlaylists]);
 
   useEffect(() => {
     loadPlaylists();
   }, [loadPlaylists]);
-
-  //   const addToPlayList = useCallback(async (track) => {
-  //     console.log(track);
-  //     return track;
-  //   }, []);
 
   if (error) {
     return <div className={styles.Error}>{error}</div>;

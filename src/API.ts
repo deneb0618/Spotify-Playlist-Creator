@@ -67,7 +67,6 @@ export async function GetPlaylistDetail(idPlayslit: string) {
       },
     })
     .then((response) => {
-      console.log("playlists", response);
       return response.data;
     })
     .catch((e) => {
