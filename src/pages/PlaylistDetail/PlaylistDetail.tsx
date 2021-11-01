@@ -17,6 +17,7 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
   const { id } = useParams<{ id: string }>();
   const [playlist, setPlaylist] = useState<Playlist | null>();
   const coverRef = useRef<HTMLImageElement | null>(null);
+  const [playlistName, setPlaylistName] = useState("");
 
   useEffect(() => {
     if (coverRef.current) {
@@ -36,33 +37,16 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
     }
   }, [playlist]);
 
-  // const loadPlaylistDetails = async (playlistId: string) => {
-  //   let cachedList: any = localStorage.getItem("playlist");
-  //   let playListArray = [];
-  //   playListArray = JSON.parse(cachedList) || [];
-  //   const tracks: any = playListArray.find(
-  //     (tr: { id: string }) => tr.id === playlistId
-  //   );
-  //   setPlaylist(tracks.tracks);
-  //   console.log("playListArray tracks", playlist);
-  //   // await GetPlaylistDetail(playlistId).then((data) => {
-  //   //   setPlaylist(data);
-  //   // });
-  // };
-
-  const loadPlaylistDetails = useCallback(
-    async (playlistId: string) => {
-      let cachedList: any = localStorage.getItem("playlist");
-      let playListArray = [];
-      playListArray = JSON.parse(cachedList) || [];
-      const tracks: any = playListArray.find(
-        (tr: { id: string }) => tr.id === playlistId
-      );
-      setPlaylist(tracks.tracks);
-      console.log("playListArray tracks", tracks.tracks);
-    },
-    [playlist]
-  );
+  const loadPlaylistDetails = useCallback(async (playlistId: string) => {
+    let cachedList: any = localStorage.getItem("playlist");
+    let playListArray = [];
+    playListArray = JSON.parse(cachedList) || [];
+    const tracks: any = playListArray.find(
+      (tr: { id: string }) => tr.id === playlistId
+    );
+    setPlaylistName(tracks.name);
+    setPlaylist(tracks.tracks);
+  }, []);
 
   useEffect(() => {
     loadPlaylistDetails(id);
@@ -75,7 +59,7 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
   };
 
   const trackList: any = playlist;
-  console.log("playListArray tracks playlist", trackList);
+  console.log("tracks", trackList);
 
   return (
     <>
@@ -85,7 +69,11 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
             <div className={styles.Background} id="Background"></div>
             <div className={styles.Gradient}></div>
             <div className={styles.Img}>
-              <img src="" alt="playlist img" ref={coverRef} />
+              <img
+                src="https://yt3.ggpht.com/52PtXtXNMroFAK69H7c1BnQNjuWmeohAc78CB9lX_qic9WmJljgsGbYM7I4rhnb8ZjNewJmPVg=s900-c-k-c0x00ffffff-no-rj"
+                alt="playlist img"
+                ref={coverRef}
+              />
             </div>
             <div className={styles.Infos}>
               <div className={styles.Playlist}>PLAYLIST</div>
@@ -94,9 +82,9 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
               </div>
               <div className={styles.Categ}>{trackList.description}</div>
               <div className={styles.Details}>
-                <span className={styles.Text_Bold}>"dsdsd"</span>
+                <span className={styles.Text_Bold}>{playlistName}</span>
                 <span className={styles.Text_Light}>
-                  43 songs, about 4 hr 20 min
+                  {trackList.length} songs, about 4 hr 20 min
                 </span>
               </div>
             </div>
