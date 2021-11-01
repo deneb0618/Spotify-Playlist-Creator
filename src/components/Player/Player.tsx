@@ -63,40 +63,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
     loadPlaylists();
   }, [loadPlaylists]);
 
-  const generatePlaylistId = () => {
-    let result = "";
-    let characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let charactersLength = characters.length;
-    for (let i = 0; i < 16; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  };
-  const savePlayListToLocalStorage = (playlist: any) => {
-    let cachedList: any = localStorage.getItem("playlist");
-    let playListArray = [];
-    playListArray = JSON.parse(cachedList) || [];
-    playListArray.push({
-      name: playlist,
-      id: generatePlaylistId(),
-      tracks: [],
-    });
-    localStorage.setItem("playlist", JSON.stringify(playListArray));
-  };
-
-  const addPlaylist = (e: any) => {
-    e.preventDefault();
-    const pList: any = playlistRef;
-    const list = pList.current.value;
-    savePlayListToLocalStorage(list);
-    setState({
-      ...sidebarState,
-      modal: false,
-      toast: "Playlist was created successfully!",
-    });
-  };
-
   const saveToPlaylist = (playlistSelect: string, play: any) => {
     let foundPlayList = currentPlayList.findIndex(
       (pL: any) => pL.id === playlistSelect
@@ -139,7 +105,7 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
       setMute(false);
     }
   }, [volume]);
-  const play: any = track;
+  const play: any = track || song;
   const currentPlayList: any = playList;
   if (!track) {
     return null;
@@ -186,11 +152,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
             </div>
           </div>
 
-          <div className={styles.Like} onClick={handleModal}>
-            <p>Create New Playlist</p>
-            <Like />
-          </div>
-
           <div className={styles.Volume}>
             <div>
               <button onClick={() => setMute(!mute)}>
@@ -228,21 +189,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
             position={time}
           />
         )}
-        <Modal show={sidebarState.modal} close={handleModal}>
-          <form onSubmit={addPlaylist}>
-            <div className={styles.title}>New Playlist</div>
-            <div className={styles.content_wrap}>
-              <input
-                type="text"
-                placeholder="My Playlist"
-                ref={playlistRef}
-                required
-              />
-              <br />
-              <button type="submit">Create</button>
-            </div>
-          </form>
-        </Modal>
         <Modal show={sidebarState.addModal} close={handleAddModal}>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 18, marginBottom: 20 }}>
