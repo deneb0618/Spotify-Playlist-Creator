@@ -59,7 +59,6 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
   };
 
   const trackList: any = playlist;
-  console.log("tracks", trackList);
 
   return (
     <>
@@ -84,7 +83,7 @@ const PlaylistDetail = ({ loadSong, currentSong }: PlaylistDetailProps) => {
               <div className={styles.Details}>
                 <span className={styles.Text_Bold}>{playlistName}</span>
                 <span className={styles.Text_Light}>
-                  {trackList.length} songs, about 4 hr 20 min
+                  {trackList.length} songs
                 </span>
               </div>
             </div>

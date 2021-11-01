@@ -71,7 +71,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
 
   const loadCurrentSong = useCallback(async () => {
     await GetCurrentPlayingTrack().then((data) => {
-      console.log("log curre", data.item);
       setTrack(data.item);
     });
   }, []);

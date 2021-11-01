@@ -8,6 +8,16 @@ type PlaylistItemProps = {
 };
 
 const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
+  const deletePlaylist = (playlistId: any) => {
+    let cachedList: any = localStorage.getItem("playlist");
+    let playListArray = [];
+    playListArray = JSON.parse(cachedList) || [];
+    var newList = playListArray.filter(function (el: any) {
+      return el.id !== playlistId;
+    });
+    localStorage.setItem("playlist", JSON.stringify(newList));
+     window.location.reload();
+  };
   return (
     <Link to={`/playlist/${playlist.id}`} className={styles.LinkPlaylist}>
       <div className={styles.Playlist}>
@@ -24,6 +34,18 @@ const PlaylistItem = ({ playlist }: PlaylistItemProps) => {
         </div>
         <div className={styles.Name}>{playlist.name}</div>
         <div className={styles.Artist}>{playlist.owner?.display_name}</div>
+        <button
+          style={{
+            backgroundColor: "red",
+            borderRadius: "5px",
+            marginTop: 15,
+          }}
+          onClick={() => {
+            deletePlaylist(playlist.id);
+          }}
+        >
+          Remove Playlist
+        </button>
       </div>
     </Link>
   );
