@@ -24,7 +24,6 @@ const Playlists = ({ playlists }: PlaylistsProps) => {
   }, [setPlayList]);
   const [sidebarState, setState] = useState({
     modal: false,
-    toast: "",
   });
 
   useEffect(() => {
@@ -62,7 +61,6 @@ const Playlists = ({ playlists }: PlaylistsProps) => {
     setState({
       ...sidebarState,
       modal: false,
-      toast: "Playlist was created successfully!",
     });
     window.location.reload();
   };
@@ -106,9 +104,20 @@ const Playlists = ({ playlists }: PlaylistsProps) => {
               placeholder="My Playlist"
               ref={playlistRef}
               required
+              style={{
+                fontSize: 16,
+                borderRadius: "5px",
+              }}
             />
             <br />
-            <button style={{ marginTop: 15 }} type="submit">
+            <button
+              style={{
+                marginTop: 15,
+                backgroundColor: "green",
+                borderRadius: "5px",
+              }}
+              type="submit"
+            >
               Create
             </button>
           </div>

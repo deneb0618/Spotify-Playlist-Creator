@@ -32,16 +32,10 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
   const [playList, setPlaylist] = useState([]);
   const [playlistSelect, setPlayListSelect] = useState("");
   const [sidebarState, setState] = useState({
-    modal: false,
-    toast: "",
     addModal: false,
   });
-  const playlistRef = useRef(null);
 
   const barCallBack = useBar;
-
-  const handleModal = () =>
-    setState({ ...sidebarState, modal: !sidebarState.modal });
 
   const handleAddModal = () =>
     setState({ ...sidebarState, addModal: !sidebarState.addModal });
@@ -72,7 +66,6 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
     setState({
       ...sidebarState,
       addModal: false,
-      toast: "Song added to playlist successfully!",
     });
   };
 
@@ -215,6 +208,7 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
                     textTransform: "capitalize",
                     width: 115,
                     height: 25,
+                    borderRadius: "5px",
                   }}
                 >
                   <option value="">Choose</option>
@@ -228,6 +222,10 @@ const Player = ({ playPause, song, playing }: PlayerProps) => {
 
                 <div style={{ marginTop: 20 }}>
                   <button
+                    style={{
+                      backgroundColor: "green",
+                      borderRadius: "5px",
+                    }}
                     onClick={() => {
                       if (playlistSelect === "") return;
                       saveToPlaylist(playlistSelect, play);
